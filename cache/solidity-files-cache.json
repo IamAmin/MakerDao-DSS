@@ -747,10 +747,10 @@
         }
       }
     },
-    "src/Counter.sol": {
-      "lastModificationDate": 1667455391994,
-      "contentHash": "ae6c800a2b4c57768024d6e9423d39e8",
-      "sourceName": "src/Counter.sol",
+    "src/Glow.sol": {
+      "lastModificationDate": 1667507977072,
+      "contentHash": "d894e07c33c9353afae8b1f8efa96358",
+      "sourceName": "src/Glow.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -782,15 +782,33 @@
       "imports": [],
       "versionRequirement": "^0.8.13",
       "artifacts": {
-        "Counter": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Counter.sol/Counter.json"
+        "ChainLog": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.sol/ChainLog.json"
+        },
+        "Dai": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.sol/Dai.json"
+        },
+        "DaiJoin": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.sol/DaiJoin.json"
+        },
+        "Glow": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.sol/Glow.json"
+        },
+        "Gusd": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.sol/Gusd.json"
+        },
+        "GusdPsm": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.sol/GusdPsm.json"
+        },
+        "Vat": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.sol/Vat.json"
         }
       }
     },
-    "test/Counter.t.sol": {
-      "lastModificationDate": 1667455391994,
-      "contentHash": "b1a6521ba9c61d5266bab1fc9a057d68",
-      "sourceName": "test/Counter.t.sol",
+    "test/Glow.t.sol": {
+      "lastModificationDate": 1667507674102,
+      "contentHash": "f17c2bc9d43f8c780860c420e3581cdf",
+      "sourceName": "test/Glow.t.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -834,12 +852,15 @@
         "lib/forge-std/src/Vm.sol",
         "lib/forge-std/src/console.sol",
         "lib/forge-std/src/console2.sol",
-        "src/Counter.sol"
+        "src/Glow.sol"
       ],
       "versionRequirement": "^0.8.13",
       "artifacts": {
-        "CounterTest": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Counter.t.sol/CounterTest.json"
+        "Faucet": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.t.sol/Faucet.json"
+        },
+        "GlowTest": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Glow.t.sol/GlowTest.json"
         }
       }
     }
