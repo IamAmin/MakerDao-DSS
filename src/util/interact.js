@@ -13,16 +13,18 @@ export const gusd = new web3.eth.Contract(gusdContractABI, gusdContractAddress);
 export const glow = new web3.eth.Contract(glowContractABI, glowContractAddress);
 
 export const getAllowancelimit = async (account) => {
-  //   const message = await gusd.methods.allowance(account, gusdContractAddress).call();
   const message = await gusd.methods
     .allowance(account, glowContractAddress)
     .call();
   return message;
 };
 
+export const getGUSDCount = async (account) => {
+  const message = await gusd.methods.balanceOf(account).call();
+  return message;
+};
+
 export const getGUSDApproval = async (address) => {
-  console.log("amin", address);
-  //input error handling
   if (!window.ethereum || address === null) {
     return {
       status:
@@ -48,12 +50,60 @@ export const getGUSDApproval = async (address) => {
       message: (
         <span>
           ✅{" "}
-          <a target="_blank" href={`https://goerli.etherscan.io/tx/${txHash}`}>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={`https://goerli.etherscan.io/tx/${txHash}`}
+          >
             View the status of your transaction on Etherscan!
           </a>
           <br />
-          ℹ️ Once the transaction is verified by the network, the message will
-          be updated automatically.
+        </span>
+      ),
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      message: "😥 " + error.message,
+    };
+  }
+};
+
+export const transferToSurplusBuffer = async (address, amt_) => {
+  //input error handling
+  if (!window.ethereum || address === null) {
+    return {
+      status:
+        "💡 Connect your Metamask wallet to update the message on the blockchain.",
+    };
+  }
+
+  //set up transaction parameters
+  const transactionParameters = {
+    to: glowContractAddress, // Required except during contract publications.
+    from: address, // must match user's active address.
+    data: glow.methods.glow(amt_).encodeABI(),
+  };
+
+  //sign the transaction
+  try {
+    const txHash = await window.ethereum.request({
+      method: "eth_sendTransaction",
+      params: [transactionParameters],
+    });
+    return {
+      status: "success",
+      message: (
+        <span>
+          ✅{" "}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={`https://goerli.etherscan.io/tx/${txHash}`}
+          >
+            View the status of your transaction on Etherscan!
+          </a>
+          <br />
         </span>
       ),
     };

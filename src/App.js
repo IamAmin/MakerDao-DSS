@@ -1,11 +1,9 @@
 // import logo from './logo.svg';
-import './App.css';
-import WalletCard from './MetaConnect';
+import "./App.css";
+import WalletCard from "./DssGlow";
 
 function App() {
-  return (
-    <WalletCard> </WalletCard>
-  );
-} 
+  return <WalletCard> </WalletCard>;
+}
 
 export default App;
