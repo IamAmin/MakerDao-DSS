@@ -51,7 +51,10 @@ const WalletCard = () => {
       const accounts = window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      accounts.then((res) => {});
+      accounts.then((res) => {
+        setAccount(res);
+        console.log(res);
+      });
 
       window.ethereum
         .request({ method: "eth_accounts" })
