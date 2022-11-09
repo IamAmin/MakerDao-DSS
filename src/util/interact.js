@@ -1,4 +1,5 @@
 const alchemyKey = process.env.REACT_APP_ALCHEMY_KEY;
+const vowContractAddress = process.env.REACT_APP_VOW_ADDRESS;
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 const web3 = createAlchemyWeb3(alchemyKey);
 
@@ -8,9 +9,14 @@ const gusdContractAddress = "0x67aeF79654D8F6CF44FdC08949c308a4F6b3c45B";
 const glowContractABI = require("../glow-contract-abi.json");
 const glowContractAddress = "0x9D21f9CC6de1bf9d058B623BA1BD272260D5890C";
 
+const vatContractABI = require("../vat-contract-abi.json");
+const vatContractAddress = "0xB966002DDAa2Baf48369f5015329750019736031";
+
 export const gusd = new web3.eth.Contract(gusdContractABI, gusdContractAddress);
 
 export const glow = new web3.eth.Contract(glowContractABI, glowContractAddress);
+
+export const vat = new web3.eth.Contract(vatContractABI, vatContractAddress);
 
 export const getAllowancelimit = async (account) => {
   const message = await gusd.methods
@@ -22,6 +28,13 @@ export const getAllowancelimit = async (account) => {
 export const getGUSDCount = async (account) => {
   const message = await gusd.methods.balanceOf(account).call();
   return message;
+};
+
+export const getSurplusBalance = async () => {
+  const dai = await vat.methods.dai(vowContractAddress).call();
+  const sin = await vat.methods.sin(vowContractAddress).call();
+  const surplusBalance = (dai - sin) / 10 ** 45;
+  return surplusBalance;
 };
 
 export const getGUSDApproval = async (address) => {
@@ -57,6 +70,9 @@ export const getGUSDApproval = async (address) => {
           >
             View the status of your transaction on Etherscan!
           </a>
+          <br />
+          ℹ️ Once the transaction is verified by the network, it will be
+          reflected here.
           <br />
         </span>
       ),
@@ -103,6 +119,9 @@ export const transferToSurplusBuffer = async (address, amt_) => {
           >
             View the status of your transaction on Etherscan!
           </a>
+          <br />
+          ℹ️ Once the transaction is verified by the network, it will be
+          reflected here.
           <br />
         </span>
       ),

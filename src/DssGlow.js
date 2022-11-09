@@ -11,6 +11,7 @@ import {
   getGUSDCount,
   getGUSDApproval,
   transferToSurplusBuffer,
+  getSurplusBalance,
 } from "./util/interact.js";
 
 const WalletCard = () => {
@@ -19,6 +20,7 @@ const WalletCard = () => {
   const [account, setAccount] = useState(null);
   const [balance, setBalance] = useState(null);
   const [gusdBalance, setGusdBalance] = useState(null);
+  const [surplusBalance, setsurplusBalance] = useState(null);
   const [gusdSpendApproval, setGusdSpendApproval] = useState("No");
   const accountsChanged = async (newAccount) => {
     setAccount(newAccount);
@@ -30,15 +32,18 @@ const WalletCard = () => {
       setBalance(ethers.utils.formatEther(balance));
       setErrorMessage();
       setSuccessMessage();
-      const getAllowanceAmt = await getAllowancelimit(newAccount[0]);
-      const getGUSDTokens = await getGUSDCount(newAccount[0]);
+      let getAllowanceAmt = await getAllowancelimit(newAccount[0]);
+      let getGUSDTokens = await getGUSDCount(newAccount[0]);
+      let getSurBalance = await getSurplusBalance();
       getAllowanceAmt > 0
         ? setGusdSpendApproval("Yes")
         : setGusdSpendApproval("No");
       getGUSDTokens > 0
         ? setGusdBalance(getGUSDTokens / 10 ** 2)
         : setGusdBalance("-");
-      console.log(getGUSDTokens / 10 ** 2);
+      getSurBalance
+        ? setsurplusBalance(Math.round(getSurBalance * 100) / 100)
+        : setsurplusBalance("-");
     } catch (err) {
       setAccount(null);
       console.error(err);
@@ -48,13 +53,12 @@ const WalletCard = () => {
 
   useEffect(() => {
     if (window.ethereum) {
-      const accounts = window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      accounts.then((res) => {
-        setAccount(res);
-        console.log(res);
-      });
+      // const accounts = window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      // });
+      // accounts.then((res) => {
+      //   setAccount(res);
+      // });
 
       window.ethereum
         .request({ method: "eth_accounts" })
@@ -72,6 +76,9 @@ const WalletCard = () => {
     if (gusdApprovalStatus.status === "success") {
       setErrorMessage();
       setSuccessMessage(gusdApprovalStatus.message);
+      setTimeout(() => {
+        accountsChanged(account);
+      }, 30000);
     } else {
       setSuccessMessage();
       setErrorMessage(gusdApprovalStatus.message);
@@ -94,6 +101,10 @@ const WalletCard = () => {
       if (transferToSurplusBufferStatus.status === "success") {
         setErrorMessage();
         setSuccessMessage(transferToSurplusBufferStatus.message);
+        document.getElementById("surplusBufferForm").reset();
+        setTimeout(() => {
+          accountsChanged(account);
+        }, 30000);
       } else {
         setSuccessMessage();
         setErrorMessage(transferToSurplusBufferStatus.message);
@@ -104,10 +115,12 @@ const WalletCard = () => {
   const connectHandler = async () => {
     if (window.ethereum) {
       try {
+        setErrorMessage(null);
+        setSuccessMessage(null);
         const res = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        await accountsChanged(res[0]);
+        await accountsChanged(res);
       } catch (err) {
         console.error(err);
         setErrorMessage("There was a problem connecting to MetaMask");
@@ -119,6 +132,9 @@ const WalletCard = () => {
 
   const chainChanged = () => {
     setErrorMessage(null);
+    setSuccessMessage(null);
+    setGusdBalance(null);
+    setGusdSpendApproval(null);
     setAccount(null);
     setBalance(null);
   };
@@ -142,6 +158,7 @@ const WalletCard = () => {
                   successMessage={successMessage}
                   onTransferToSurplusBuffer={onTransferToSurplusBuffer}
                   gusdBalance={gusdBalance}
+                  surplusBalance={surplusBalance}
                 ></TransferForm>
               ) : (
                 <Button onClick={connectHandler} variant="primary">

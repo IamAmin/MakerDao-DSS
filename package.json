@@ -1,6 +1,7 @@
 {
   "name": "eth_app",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@alch/alchemy-web3": "^1.4.7",

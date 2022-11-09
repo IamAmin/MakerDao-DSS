@@ -15,6 +15,7 @@ const TransferForm = ({
   successMessage,
   onTransferToSurplusBuffer,
   gusdBalance,
+  surplusBalance,
 }) => {
   return (
     <>
@@ -22,7 +23,7 @@ const TransferForm = ({
         <Stack spacing={2}>
           <div className="row">
             <div className="offset-2 col-md-8">
-              <Form>
+              <Form id="surplusBufferForm">
                 <Form.Group className="mb-3" controlId="enteredAmount">
                   <Form.Control
                     className="form-control"
@@ -46,21 +47,34 @@ const TransferForm = ({
               </Button>
             </div>
           </div>
-          <div className="clear-row">
+          <div className="clearfix">
             <br />
           </div>
         </Stack>
       ) : (
-        <Button
-          onClick={ongetGUSDApproval}
-          className="btn btn-primary col-md-6"
-          style={{ marginTop: "20px" }}
-        >
-          {" "}
-          Appove GUSD{" "}
-        </Button>
+        <div className="row">
+          <div className="offset-2 col-md-8">
+            <Button
+              onClick={ongetGUSDApproval}
+              className="btn btn-primary col-md-6"
+              style={{ marginTop: "20px" }}
+            >
+              {" "}
+              Approve GUSD{" "}
+            </Button>
+          </div>
+          <div className="col-12 mt-3">
+            <i style={{ marginTop: "10px" }}>
+              (To transfer GUSD to the Surplus Buffer, we require one time
+              approval. Please click the above button to provide us the
+              permission.)
+            </i>
+          </div>
+          <div className="clearfix">
+            <br />
+          </div>
+        </div>
       )}
-
       <div className="clear-fix">
         <br />
 
@@ -78,7 +92,7 @@ const TransferForm = ({
         <br />
       </div>
       <div className="row">
-        <div className="offset-1 col-9">
+        <div className="col-12">
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
@@ -103,7 +117,7 @@ const TransferForm = ({
               </tr>
               <tr>
                 <td>
-                  <Typography variant="h6"> Approval</Typography>
+                  <Typography variant="h6"> GUSD Approval</Typography>
                 </td>
                 <td>
                   {" "}
@@ -117,6 +131,15 @@ const TransferForm = ({
                 <td>
                   {" "}
                   <Typography variant="h6">{gusdBalance}</Typography>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Typography variant="h6"> Surplus Buffer</Typography>
+                </td>
+                <td>
+                  {" "}
+                  <Typography variant="h6">{surplusBalance}</Typography>
                 </td>
               </tr>
             </tbody>
