@@ -6,6 +6,15 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+
+  // These options are needed to round to whole numbers if that's what you want.
+  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+});
+
 const TransferForm = ({
   ongetGUSDApproval,
   account,
@@ -19,7 +28,7 @@ const TransferForm = ({
 }) => {
   return (
     <>
-      {gusdSpendApproval === "Yes" ? (
+      {gusdSpendApproval > 0 ? (
         <Stack spacing={2}>
           <div className="row">
             <div className="offset-2 col-md-8">
@@ -117,11 +126,17 @@ const TransferForm = ({
               </tr>
               <tr>
                 <td>
-                  <Typography variant="h6"> GUSD Approval</Typography>
+                  <Typography variant="h6"> Approved GUSD Amount</Typography>
                 </td>
                 <td>
                   {" "}
-                  <Typography variant="h6">{gusdSpendApproval}</Typography>
+                  <Typography variant="h6">
+                    {gusdSpendApproval === "0" ? (
+                      gusdSpendApproval
+                    ) : (
+                      <span style={{ fontSize: "2.5rem" }}>∞</span>
+                    )}
+                  </Typography>
                 </td>
               </tr>
               <tr>
@@ -139,7 +154,9 @@ const TransferForm = ({
                 </td>
                 <td>
                   {" "}
-                  <Typography variant="h6">{surplusBalance}</Typography>
+                  <Typography variant="h6">
+                    {formatter.format(surplusBalance)}
+                  </Typography>
                 </td>
               </tr>
             </tbody>

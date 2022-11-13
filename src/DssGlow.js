@@ -21,7 +21,7 @@ const WalletCard = () => {
   const [balance, setBalance] = useState(null);
   const [gusdBalance, setGusdBalance] = useState(null);
   const [surplusBalance, setsurplusBalance] = useState(null);
-  const [gusdSpendApproval, setGusdSpendApproval] = useState("No");
+  const [gusdSpendApproval, setGusdSpendApproval] = useState("");
   const accountsChanged = async (newAccount) => {
     setAccount(newAccount);
     try {
@@ -35,9 +35,10 @@ const WalletCard = () => {
       let getAllowanceAmt = await getAllowancelimit(newAccount[0]);
       let getGUSDTokens = await getGUSDCount(newAccount[0]);
       let getSurBalance = await getSurplusBalance();
+      console.log(getAllowanceAmt);
       getAllowanceAmt > 0
-        ? setGusdSpendApproval("Yes")
-        : setGusdSpendApproval("No");
+        ? setGusdSpendApproval(getAllowanceAmt)
+        : setGusdSpendApproval("0");
       getGUSDTokens > 0
         ? setGusdBalance(getGUSDTokens / 10 ** 2)
         : setGusdBalance("-");
